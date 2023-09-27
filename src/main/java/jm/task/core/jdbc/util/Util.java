@@ -17,7 +17,7 @@ public class Util {
     }
 
     public static SessionFactory getConnection() {
-        if (sessionFactory != null) {
+        if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
                 configuration.setProperty("hibernate.connection.driver_class", DRIVER);
