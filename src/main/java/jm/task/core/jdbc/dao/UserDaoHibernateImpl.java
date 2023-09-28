@@ -80,12 +80,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Transaction transaction=null;
-        List<User> allUsers =null;
-        try(Session session = Util.getConnection().openSession()) {
-             transaction = session.beginTransaction();
-             Query<User> query = session.createQuery(" from User");
-             allUsers = query.list();
+//        Transaction transaction=null;
+//        List<User> allUsers =null;
+        Session session = Util.getConnection().openSession() ;
+            Transaction  transaction = session.beginTransaction();
+        List<User>  allUsers = null;
+        try {
+            allUsers = session.createQuery(" from User").getResultList();
+//             allUsers = query.list();
 //             allUsers = session.createQuery(" from User").getResultList();
             for (User user : allUsers) {
                 System.out.println(user);
@@ -93,8 +95,12 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction !=null){
-                transaction.rollback();
-            }
+                transaction.rollback();}
+        } finally {
+
+session.close();
+
+
         }
         return allUsers;
     }
