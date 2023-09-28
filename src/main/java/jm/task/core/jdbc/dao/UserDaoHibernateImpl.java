@@ -4,8 +4,6 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -80,27 +78,19 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-//        Transaction transaction=null;
-//        List<User> allUsers =null;
-        Session session = Util.getConnection().openSession() ;
-            Transaction  transaction = session.beginTransaction();
-        List<User>  allUsers = null;
-        try {
-            allUsers = session.createQuery(" from User").getResultList();
-//             allUsers = query.list();
-//             allUsers = session.createQuery(" from User").getResultList();
+        Transaction transaction=null;
+        List<User> allUsers =null;
+        try(Session session = Util.getConnection().openSession()) {
+             transaction = session.beginTransaction();
+             allUsers = session.createQuery(" from User", User.class).list();
             for (User user : allUsers) {
                 System.out.println(user);
             }
             transaction.commit();
         } catch (Exception e) {
             if (transaction !=null){
-                transaction.rollback();}
-        } finally {
-
-session.close();
-
-
+                transaction.rollback();
+            }
         }
         return allUsers;
     }
