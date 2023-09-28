@@ -26,7 +26,7 @@ public class Util {
                 configuration.setProperty("hibernate.connection.password", PASSWORD);
                 configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
                 configuration.setProperty("hibernate.show_sql", "true");
-                configuration.setProperty("hibernate.hbm2ddl.auto", "none");
+//                configuration.setProperty("hibernate.hbm2ddl.auto", "create");
                 configuration.addAnnotatedClass(User.class);
 
                 sessionFactory = configuration.buildSessionFactory();

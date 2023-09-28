@@ -4,6 +4,8 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -50,8 +52,9 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction=null;
         try(Session session = Util.getConnection().openSession()) {
              transaction = session.beginTransaction();
-            User user = new User(name, lastName, age);
-            session.save(user);
+//            User user = new User(name, lastName, age);
+//            session.save(user);
+            session.persist(new User(name, lastName, age));
             transaction.commit();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (Exception e) {
@@ -78,10 +81,12 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         Transaction transaction=null;
-        List<User> allUsers = null;
+        List<User> allUsers =null;
         try(Session session = Util.getConnection().openSession()) {
              transaction = session.beginTransaction();
-            allUsers = session.createSQLQuery("select * from users").addEntity(User.class).list();
+             Query<User> query = session.createQuery(" from User");
+             allUsers = query.list();
+//             allUsers = session.createQuery(" from User").getResultList();
             for (User user : allUsers) {
                 System.out.println(user);
             }
